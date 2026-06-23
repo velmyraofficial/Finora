@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import BottomNav from './BottomNav';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const hideNavPaths = ['/', '/welcome', '/login', '/signup', '/otp', '/profile-setup', '/forgot-password'];
 
@@ -15,6 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </main>
         {showNav && <BottomNav />}
       </div>
+      <SpeedInsights/>
     </div>
   );
 
