@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Mail, Lock, Eye, EyeOff, Fingerprint, Info } from 'lucide-react';
@@ -14,6 +14,8 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
+
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const handleLogin = async () => {
     setError('');
@@ -54,25 +56,56 @@ export default function Login() {
             {/* Email */}
             <div className="relative">
               <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input
+              {/* <input
                 type="email"
                 placeholder="Email address"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 className="w-full h-14 pl-12 pr-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500/50 focus:bg-white/[0.07] transition-all"
+              /> */}
+              <input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                /* YAHAN YEH ADD KAREIN */
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    passwordRef.current?.focus();
+                  }
+                }}
+                className="w-full h-14 pl-12 pr-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500/50 focus:bg-white/[0.07] transition-all"
               />
             </div>
+
+
 
             {/* Password */}
             <div className="relative">
               <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input
+              {/* <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 className="w-full h-14 pl-12 pr-12 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500/50 focus:bg-white/[0.07] transition-all"
+              /> */}
+
+              <input
+                ref={passwordRef} /* YAHAN REF ASSIGN KAREIN */
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                /* YAHAN YEH ADD KAREIN */
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleLogin();
+                  }
+                }}
+                className="w-full h-14 pl-12 pr-12 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500/50 focus:bg-white/[0.07] transition-all"
               />
+
               <button onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500">
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>

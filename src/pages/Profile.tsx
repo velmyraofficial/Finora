@@ -8,7 +8,7 @@ import { useApp } from '@/hooks/useAppContext';
 import { useState } from 'react';
 
 const menuItems = [
-  { label: 'Notifications', icon: Bell, route: '/notifications', badge: 3 },
+  { label: 'Notifications', icon: Bell, route: '/notifications' },
   { label: 'Connected Banks', icon: Landmark, route: '/accounts' },
   { label: 'Bills & Subscriptions', icon: Receipt, route: '/bills' },
   { label: 'Savings Goals', icon: Target, route: '/savings-goals' },
@@ -21,7 +21,7 @@ const menuItems = [
 export default function Profile() {
   const [showHelpModal, setShowHelpModal] = useState(false);
   const navigate = useNavigate();
-  const { user, logout } = useApp();
+  const { user, logout, unreadNotifications } = useApp();
 
   return (
     <div className="min-h-screen bg-[#0a0e1a] flex justify-center">
@@ -54,35 +54,41 @@ export default function Profile() {
         </div>
 
         <div className="space-y-2">
-          {menuItems.map((item, i) => (
-            <motion.button
-              key={item.label}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 + i * 0.05 }}
-              // onClick={() => navigate(item.route, { state: item.state })}
-              onClick={() => {
-                if (item.label === 'Help & Support') {
-                  setShowHelpModal(true);
-                  return;
-                }
+          {menuItems.map((item, i) => {
+            const currentBadge = item.label === 'Notifications' ? unreadNotifications : null;
 
-                navigate(item.route, { state: item.state });
-              }}
-              className="w-full flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/5 text-left active:bg-white/10 transition-colors"
-            >
-              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
-                <item.icon size={18} className="text-slate-300" />
-              </div>
-              <span className="flex-1 text-white text-sm font-medium">{item.label}</span>
-              {item.badge ? (
-                <span className="w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
-                  {item.badge}
-                </span>
-              ) : null}
-              <ChevronRight size={16} className="text-slate-600" />
-            </motion.button>
-          ))}
+            return (
+              <motion.button
+                key={item.label}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 + i * 0.05 }}
+                onClick={() => {
+                  if (item.label === 'Help & Support') {
+                    setShowHelpModal(true);
+                    return;
+                  }
+
+                  navigate(item.route, { state: item.state });
+                }}
+                className="w-full flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/5 text-left active:bg-white/10 transition-colors"
+              >
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+                  <item.icon size={18} className="text-slate-300" />
+                </div>
+                <span className="flex-1 text-white text-sm font-medium">{item.label}</span>
+
+                {/* Ab badge dynamic ho gaya hai aur zero par hide ho jayega */}
+                {currentBadge !== null && currentBadge > 0 ? (
+                  <span className="w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
+                    {currentBadge}
+                  </span>
+                ) : null}
+
+                <ChevronRight size={16} className="text-slate-600" />
+              </motion.button>
+            );
+          })}
         </div>
 
         {/* Logout */}

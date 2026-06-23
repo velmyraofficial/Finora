@@ -72,8 +72,7 @@ export default function Analytics() {
           </div>
 
           <p className="text-slate-400 text-sm leading-relaxed">
-            This page demonstrates the user interface and user experience design for security settings.
-            Settings are not fully implemented and do not result in any actual changes to data or system behavior.
+            The analytics shown on this page are generated using mock/demo data and may not reflect actual financial activity or real-world performance.
           </p>
         </div>
 
